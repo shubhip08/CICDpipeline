@@ -1,0 +1,59 @@
+# GitHub Copilot: Create a CI workflow to run app.py when I push code
+name: Python CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        python app.py
+        ```
+    - name: Run tests
+      run: |
+        pytest
+    - name: Upload coverage report
+      run: |
+        bash <(curl -s https://codecov.io/bash) -f coverage.xml
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: coverage
+        path: coverage.xml
+    - name: Notify on failure
+      if: failure()
+      run: |
+        echo "Build failed. Please check the logs."
+        # You can add more notification steps here, like sending an email or a message to Slack.: [checkout@v2, setup-python@v2]
+    - name: Run app.py
+      run: |
+        python app.py
+    steps:
+    - name: Check code style
+      run: |
+        flake8 .
+    - name: Run linters
+      run: |
+        pylint app.py
+    - name: Run security checks
+      run: |
+        bandit -r app.py
+    - name: Run code quality checks
+      run: |
+        mypy app.py
+        pytest --cov=app.py --cov-report=xml
+    - name: Run app.py
+      run: |
+        python app.py
