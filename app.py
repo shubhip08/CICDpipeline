@@ -1,6 +1,10 @@
 # app.py
+def add(a, b):
+    return a + b
+
 def main():
-    print("Hello from GitHub Copilot CI/CD demo!")
+    result = add(3, 5)
+    print(f"Result is: {result}")
 
 if __name__ == "__main__":
     main()

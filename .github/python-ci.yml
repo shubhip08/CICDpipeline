@@ -57,3 +57,16 @@ jobs:
     - name: Run app.py
       run: |
         python app.py
+# Create a GitHub Actions workflow to install Python, run tests from test_app.py, and show the result
+    - name: Run app.py
+      run: |
+        python app.py
+    - name: Run tests
+      run: |
+        pytest test_app.py
+    - name: Show test results
+      run: |
+        cat test_results.txt
+    - name: Run app.py
+      run: |
+        python app.py       
