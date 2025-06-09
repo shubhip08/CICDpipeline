@@ -1,12 +1,13 @@
 import pytest
 from flask.testing import FlaskClient
 from app import app
+from typing import Generator
 
 @pytest.fixture
-def client() -> FlaskClient:
+def client() -> Generator[FlaskClient, None, None]:
     """Fixture to create a test client for the Flask app.
 
-    Returns:
+    Yields:
         FlaskClient: Test client for the Flask application.
     """
     with app.test_client() as client:

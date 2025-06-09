@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, Response, request
 import logging
+from config import APP_VERSION
 
 app = Flask(__name__)
 
@@ -37,6 +38,21 @@ def health() -> Response:
         return jsonify(status), 200
     except Exception as e:
         logger.error("Error in health endpoint: %s", str(e))
+        error_status = {"status": "error", "message": str(e)}
+        return jsonify(error_status), 500
+
+@app.route("/version")
+def version() -> Response:
+    """Version endpoint that returns the app version from config file.
+
+    Returns:
+        Response: JSON response with app version.
+    """
+    try:
+        logger.info("Received version check from %s", request.remote_addr)
+        return jsonify({"version": APP_VERSION}), 200
+    except Exception as e:
+        logger.error("Error in version endpoint: %s", str(e))
         error_status = {"status": "error", "message": str(e)}
         return jsonify(error_status), 500
 
