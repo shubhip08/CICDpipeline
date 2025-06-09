@@ -22,30 +22,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run tests with coverage
+      - name: Run tests
+        run: pytest
+
+      - name: Reload PythonAnywhere web app
         run: |
-          pytest --cov=app --cov-report=xml
-
-      # Example deployment step: Copy files to remote server via SSH (update with your server details)
-      - name: Deploy to remote server
-        if: success()
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USER }}
-          key: ${{ secrets.REMOTE_KEY }}
-          source: "."
-          target: "/path/to/your/app"
-
-      # Optionally, restart the Flask app on the remote server (requires SSH access)
-      - name: Restart Flask app
-        if: success()
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USER }}
-          key: ${{ secrets.REMOTE_KEY }}
-          script: |
-            cd /path/to/your/app
-            # Example: restart using systemd
-            sudo systemctl restart flask-app.service
+          curl -X POST "https://www.pythonanywhere.com/api/v0/user/${{ secrets.PA_USERNAME }}/webapps/${{ secrets.PA_USERNAME }}.pythonanywhere.com/reload/" \
+            -H "Authorization: Token ${{ secrets.PA_API_TOKEN }}"

@@ -1,6 +1,14 @@
 from flask import Flask, jsonify, Response, request
 import logging
 from config import APP_VERSION
+import sys
+
+# Add the specific path to the system path
+path = '/home/shubhip/CICDpipeline'
+if path not in sys.path:
+    sys.path.append(path)
+
+from app import app as application
 
 app = Flask(__name__)
 
